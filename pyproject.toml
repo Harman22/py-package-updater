@@ -3,20 +3,69 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "package_updater"
+name = "py-package-updater"
 version = "0.1.0"
-authors = [
-  { name="Your Name", email="your.email@example.com" },
-]
-description = "A tool to automatically update Python packages while verifying tests"
+description = "A smart Python package updater that safely upgrades dependencies while verifying tests pass."
 readme = "README.md"
 requires-python = ">=3.8"
+license = "MIT"
+keywords = [
+    "package-manager",
+    "dependency-management",
+    "testing",
+    "automation",
+    "requirements",
+    "pipfile"
+]
+authors = [
+    { name = "Harmanpreet Bhatti", email = "data2k18@gmail.com" }
+]
 classifiers = [
-    "Programming Language :: Python :: 3",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Testing",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "requests>=2.31.0",
+    "packaging>=23.2",
+    "virtualenv>=20.25.0",
+    "pytest>=8.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.1.1",
+    "isort>=5.13.2",
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0"
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/yourusername/package_updater"
-"Bug Tracker" = "https://github.com/yourusername/package_updater/issues" 
+Homepage = "https://github.com/Harman22/pypackageupdater"
+Repository = "https://github.com/Harman22/pypackageupdater.git"
+Documentation = "https://github.com/Harman22/pypackageupdater#readme"
+"Bug Tracker" = "https://github.com/Harman22/pypackageupdater/issues"
+
+[project.scripts]
+pypackageupdater = "package_updater.__main__:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-ra -q"
+
+[tool.black]
+line-length = 120
+target-version = ["py38"]
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
