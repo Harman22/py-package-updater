@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Test coverage and reports
+.coverage
+htmlcov/
+.cache/
+pytest_cache/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.iml
+
+# Backup files
+*.bak
+*.orig
+
+# Environment variables
+.env
+
+# Local run files
+requirements_backups
