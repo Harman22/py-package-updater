@@ -8,14 +8,9 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from package_updater.__main__ import (
-    analyze_updates,
-    apply_updates,
-    filter_updates,
-    main,
-    validate_project_path,
-    validate_tests,
-)
+from package_updater.__main__ import (analyze_updates, apply_updates,
+                                      filter_updates, main,
+                                      validate_project_path, validate_tests)
 
 
 @pytest.fixture
@@ -74,7 +69,11 @@ def test_validate_tests_valid(mock_test_discovery, temp_project_dir):
     """Test validate_tests with valid test files."""
     mock_test_discovery.return_value.find_test_files.return_value = ["test_sample.py"]
     mock_test_discovery.return_value.discover_and_validate_tests.return_value = {
-        "test_sample.py": {"valid": True, "test_functions": ["test_simple"], "relative_path": "./"}
+        "test_sample.py": {
+            "valid": True,
+            "test_functions": ["test_simple"],
+            "relative_path": "./",
+        }
     }
     assert validate_tests(str(temp_project_dir)) is True
 
@@ -141,7 +140,9 @@ def test_apply_updates_real_run(mock_file_updater, temp_project_dir):
     """Test apply_updates in real mode."""
     updates = {"requests": "2.26.0", "pytest": "6.2.5"}
     args = Mock(dry_run=False)
-    mock_file_updater.return_value.update_package_files.return_value = {"requirements.txt": True}
+    mock_file_updater.return_value.update_package_files.return_value = {
+        "requirements.txt": True
+    }
     apply_updates(temp_project_dir, updates, args)
     mock_file_updater.return_value.update_package_files.assert_called_once_with(updates)
 
@@ -195,7 +196,12 @@ def test_create_parser():
 @patch("package_updater.__main__.validate_project_path")
 @patch("package_updater.__main__.analyze_updates")
 @patch("package_updater.__main__.apply_updates")
-def test_main_successful_run(mock_apply_updates, mock_analyze_updates, mock_validate_project_path, temp_project_dir):
+def test_main_successful_run(
+    mock_apply_updates,
+    mock_analyze_updates,
+    mock_validate_project_path,
+    temp_project_dir,
+):
     """Test main function with a successful run."""
     mock_validate_project_path.return_value = temp_project_dir
     mock_analyze_updates.return_value = {"requests": "2.26.0"}

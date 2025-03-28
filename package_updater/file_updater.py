@@ -160,9 +160,3 @@ class FileUpdater:
             results["Pipfile"] = self.update_pipfile(updates)
 
         return results
-
-    # def get_latest_backup(self, file_name: str) -> Optional[Path]:
-    #     """Get the most recent backup for a given file."""
-    #     logger.info("Getting latest backup for %s", file_name)
-    #     backups = list(self.backup_dir.glob(f"{file_name}.*"))
-    #     return max(backups, key=lambda p: p.stat().st_mtime) if backups else None

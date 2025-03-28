@@ -208,16 +208,9 @@ def main(args: Optional[list[str]] = None) -> int:
     setup_logging(args.verbose)
     logger.debug("Arguments: %s", args)
 
-    # Validate project path
-    project_path = validate_project_path(args.project_path)
-    if not project_path:
-        return 1
-
     try:
         # Validate and initialize
         project_path = validate_and_initialize(args)
-        if not project_path:
-            return 1
 
         # Analyze updates
         updates = analyze_updates(project_path, args)

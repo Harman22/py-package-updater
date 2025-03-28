@@ -37,7 +37,6 @@ class EnvironmentManager:
         try:
             if self.venv_path.exists():
                 shutil.rmtree(self.venv_path)
-
             virtualenv.cli_run([str(self.venv_path)], setup_logging=False)
             return True
         except Exception as e:  # pylint: disable=broad-exception-caught
@@ -116,7 +115,7 @@ class EnvironmentManager:
             if package.lower() not in {k.lower() for k in installed.keys()}:
                 logger.debug("Package %s is not installed", package)
                 return False
-            if version and installed[package] != version:
+            if version and installed[package.lower()] != version:
                 logger.debug(
                     "Package %s version mismatch: expected %s got %s",
                     package,

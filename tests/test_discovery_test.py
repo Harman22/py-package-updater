@@ -87,7 +87,9 @@ def test_discover_and_validate_tests(temp_project_dir):
 
 def test_run_tests(temp_project_dir):
     """Test that the run_tests method executes pytest correctly."""
-    with patch("subprocess.run", return_value=Mock(returncode=0, stdout="Success", stderr="")) as mock_run:
+    with patch(
+        "subprocess.run", return_value=Mock(returncode=0, stdout="Success", stderr="")
+    ) as mock_run:
 
         discoverer = TestDiscovery(str(temp_project_dir))
         discoverer.find_test_files()
@@ -95,7 +97,12 @@ def test_run_tests(temp_project_dir):
         # Run tests and assert subprocess.run was called with the correct arguments
         result = discoverer.run_tests()
         assert result
-        mock_run.assert_called_once_with(["pytest"] + discoverer.test_files, capture_output=True, text=True, check=True)
+        mock_run.assert_called_once_with(
+            ["pytest"] + discoverer.test_files,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
 
         # Simulate a failing test run
         mock_run.return_value.returncode = 1

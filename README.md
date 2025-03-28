@@ -12,7 +12,6 @@ Python Package Updater is a tool designed to simplify the process of updating Py
 - **Isolated Testing**: Creates isolated virtual environments to test updates without affecting your system environment.
 - **Update Analysis**: Analyzes available package updates and determines compatibility.
 - **Safe Updates**: Ensures updates are applied only if all tests pass.
-- **Detailed Reports**: Generates reports on update status and compatibility.
 
 ## Installation
 
