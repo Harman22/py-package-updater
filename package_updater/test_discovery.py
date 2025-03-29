@@ -109,23 +109,17 @@ class TestDiscovery:
             logger.error("Error validating %s: %s", file_path, str(e))
             return False
 
-    def discover_and_validate_tests(self) -> Dict[str, Dict]:
+    def validate_test_files(self) -> Dict[str, Dict]:
         """
         Find all test files and validate them.
         Returns a dictionary with test file information.
         """
         logger.info("Discovering and validating test files")
-        self.find_test_files()
 
         results = {}
         for test_file in self.test_files:
             is_valid = self.validate_test_file(test_file)
-            results[test_file] = {
-                "valid": is_valid,
-                "test_functions": list(self.test_functions.get(test_file, set())),
-                "relative_path": os.path.relpath(test_file, self.project_path),
-            }
-
+            results[test_file] = is_valid
         return results
 
     def run_tests(self, test_files: List[str] = None) -> bool:

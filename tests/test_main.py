@@ -8,9 +8,14 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from package_updater.__main__ import (analyze_updates, apply_updates,
-                                      filter_updates, main,
-                                      validate_project_path, validate_tests)
+from package_updater.__main__ import (
+    analyze_updates,
+    apply_updates,
+    filter_updates,
+    main,
+    validate_project_path,
+    validate_tests,
+)
 
 
 @pytest.fixture
@@ -68,13 +73,7 @@ def test_filter_updates():
 def test_validate_tests_valid(mock_test_discovery, temp_project_dir):
     """Test validate_tests with valid test files."""
     mock_test_discovery.return_value.find_test_files.return_value = ["test_sample.py"]
-    mock_test_discovery.return_value.discover_and_validate_tests.return_value = {
-        "test_sample.py": {
-            "valid": True,
-            "test_functions": ["test_simple"],
-            "relative_path": "./",
-        }
-    }
+    mock_test_discovery.return_value.validate_test_files.return_value = {"test_sample.py": True}
     assert validate_tests(str(temp_project_dir)) is True
 
 
@@ -140,9 +139,7 @@ def test_apply_updates_real_run(mock_file_updater, temp_project_dir):
     """Test apply_updates in real mode."""
     updates = {"requests": "2.26.0", "pytest": "6.2.5"}
     args = Mock(dry_run=False)
-    mock_file_updater.return_value.update_package_files.return_value = {
-        "requirements.txt": True
-    }
+    mock_file_updater.return_value.update_package_files.return_value = {"requirements.txt": True}
     apply_updates(temp_project_dir, updates, args)
     mock_file_updater.return_value.update_package_files.assert_called_once_with(updates)
 

@@ -13,6 +13,10 @@ Python Package Updater is a tool designed to simplify the process of updating Py
 - **Update Analysis**: Analyzes available package updates and determines compatibility.
 - **Safe Updates**: Ensures updates are applied only if all tests pass.
 
+## Architecture Diagram
+
+![Architecture Diagram](./assets/flow.drawio.png)
+
 ## Installation
 
 Clone the repository and initialize the virtual environment:

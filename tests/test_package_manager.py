@@ -10,9 +10,7 @@ package_manager = PackageManager(project_path)
 
 @patch("os.path.exists")
 def test_detect_package_file_requirements(mock_exists):
-    mock_exists.side_effect = lambda path: path == os.path.join(
-        project_path, "requirements.txt"
-    )
+    mock_exists.side_effect = lambda path: path == os.path.join(project_path, "requirements.txt")
     result = package_manager.detect_package_file()
     assert result == os.path.join(project_path, "requirements.txt")
 
@@ -59,9 +57,7 @@ def test_get_latest_version(mock_get):
 def test_get_version_range(mock_get):
     mock_response = MagicMock()
     mock_response.status_code = 200
-    mock_response.json.return_value = {
-        "releases": {"1.0.0": {}, "2.0.0": {}, "3.0.0": {}}
-    }
+    mock_response.json.return_value = {"releases": {"1.0.0": {}, "2.0.0": {}, "3.0.0": {}}}
     mock_get.return_value = mock_response
 
     result = package_manager.get_version_range("package1", "1.0.0", "3.0.0")

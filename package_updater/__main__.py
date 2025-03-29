@@ -102,21 +102,14 @@ def validate_tests(project_path: str) -> bool:
         logger.warning("No test files found in the project")
         return False
 
-    test_results = test_discovery.discover_and_validate_tests()
-    valid_tests = any(result["valid"] for result in test_results.values())
+    test_results = test_discovery.validate_test_files()
+    valid_tests = any(result for result in test_results.values())
 
     if not valid_tests:
         logger.error("No valid tests found in the project")
         return False
 
     logger.info("Found %s test files", len(test_files))
-    for _, result in test_results.items():
-        if result["valid"]:
-            logger.debug("Valid test file: %s", result["relative_path"])
-            logger.debug("Test functions: %s", ", ".join(result["test_functions"]))
-        else:
-            logger.warning("Invalid test file: %s", result["relative_path"])
-
     return True
 
 
@@ -130,20 +123,6 @@ def filter_updates(
     return {
         pkg: version for pkg, version in all_updates.items() if pkg in selected_packages
     }
-
-
-def validate_and_initialize(args) -> Optional[Path]:
-    """Validate the project path and initialize components."""
-    # Validate project path
-    project_path = validate_project_path(args.project_path)
-    if not project_path:
-        return None
-
-    # Validate tests if not skipping
-    if not args.skip_tests and not validate_tests(str(project_path)):
-        logger.warning("Proceeding with report generation despite no valid tests")
-
-    return project_path
 
 
 def analyze_updates(project_path: Path, args) -> Dict[str, str]:
@@ -189,8 +168,7 @@ def apply_updates(project_path: Path, updates: Dict[str, str], args) -> None:
                 logger.error("Failed to update %s", file_name)
 
     elif args.dry_run and updates:
-        logger.info("Dry run - no files were modified")
-        logger.info("The following updates are available:")
+        logger.info("\n\n\n\n\n\n\n\n\nThe following updates are available:")
         for pkg, version in updates.items():
             logger.info("Package: %s, Recommended Version: %s", pkg, version)
 
@@ -210,7 +188,11 @@ def main(args: Optional[list[str]] = None) -> int:
 
     try:
         # Validate and initialize
-        project_path = validate_and_initialize(args)
+        project_path = validate_project_path(args.project_path)
+
+        # Validate tests if not skipping
+        if not args.skip_tests and not validate_tests(str(project_path)):
+            logger.warning("Proceeding with report generation despite no valid tests")
 
         # Analyze updates
         updates = analyze_updates(project_path, args)

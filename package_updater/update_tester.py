@@ -20,10 +20,7 @@ class UpdateResult:
     """Results of a package update attempt."""
 
     success: bool
-    old_version: str
-    new_version: str
     error_message: Optional[str] = None
-    test_output: Optional[str] = None
 
 
 @dataclass
@@ -112,8 +109,6 @@ class UpdateTester:
         if not current_version:
             return UpdateResult(
                 False,
-                "unknown",
-                version,
                 f"Package {package_name} not found in current packages",
             )
 
@@ -122,24 +117,18 @@ class UpdateTester:
             if not self.env_manager.install_package(package_name, version):
                 return UpdateResult(
                     False,
-                    current_version,
-                    version,
                     f"Failed to install {package_name}=={version}",
                 )
 
             # Run tests
             tests_passed, test_output = self.run_tests()
             if not tests_passed:
-                return UpdateResult(
-                    False, current_version, version, "Tests failed", test_output
-                )
+                return UpdateResult(False, f"Tests failed: {test_output}")
 
-            return UpdateResult(True, current_version, version, test_output=test_output)
+            return UpdateResult(True)
 
         except Exception as e:  # pylint: disable=broad-exception-caught
-            return UpdateResult(
-                False, current_version, version, f"Error during testing: {str(e)}"
-            )
+            return UpdateResult(False, f"Error during testing: {str(e)}")
 
     def find_compatible_update(self, package_name: str) -> PackageUpdateStatus:
         """Find the highest compatible version for a package."""

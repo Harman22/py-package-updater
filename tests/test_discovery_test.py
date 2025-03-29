@@ -72,24 +72,21 @@ def test_extract_test_functions(temp_project_dir):
 def test_discover_and_validate_tests(temp_project_dir):
     """Test the complete test discovery and validation process."""
     discoverer = TestDiscovery(str(temp_project_dir))
-    results = discoverer.discover_and_validate_tests()
+    discoverer.find_test_files()
+    results = discoverer.validate_test_files()
 
     assert len(results) == 2
 
     valid_file = os.path.join(str(temp_project_dir), "test_valid.py")
-    assert results[valid_file]["valid"]
-    assert len(results[valid_file]["test_functions"]) == 2
+    assert results[valid_file]
 
     invalid_file = os.path.join(str(temp_project_dir), "test_invalid.py")
-    assert not results[invalid_file]["valid"]
-    assert len(results[invalid_file]["test_functions"]) == 0
+    assert not results[invalid_file]
 
 
 def test_run_tests(temp_project_dir):
     """Test that the run_tests method executes pytest correctly."""
-    with patch(
-        "subprocess.run", return_value=Mock(returncode=0, stdout="Success", stderr="")
-    ) as mock_run:
+    with patch("subprocess.run", return_value=Mock(returncode=0, stdout="Success", stderr="")) as mock_run:
 
         discoverer = TestDiscovery(str(temp_project_dir))
         discoverer.find_test_files()
