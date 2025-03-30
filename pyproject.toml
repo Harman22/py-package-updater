@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "py_package_updater"
-version = "0.1.0"
+version = "0.1.1"
 description = "A smart Python package updater that safely upgrades dependencies while verifying tests pass."
 readme = "README.md"
 requires-python = ">=3.8"
