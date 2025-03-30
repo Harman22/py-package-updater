@@ -17,7 +17,7 @@ This tool automates the entire workflow of dependency updates, from detecting ou
 
 ## Architecture Diagram
 
-![Architecture Diagram](./assets/flow.drawio.png)
+![Architecture Diagram](https://raw.githubusercontent.com/Harman22/py-package-updater/refs/heads/main/assets/flow.drawio.png)
 
 ## Installation
 
