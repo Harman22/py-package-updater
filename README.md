@@ -2,8 +2,9 @@
 
 ![Supported Python Versions](https://img.shields.io/badge/python-3.8%2B-blue)
 
+Python Package Updater is a robust tool designed to streamline the process of updating Python package dependencies in your projects. Keeping your dependencies up-to-date is crucial for maintaining security, performance, and compatibility with the latest features. However, this process can often be tedious and error-prone, especially when dealing with complex projects or multiple dependencies.
 
-Python Package Updater is a tool designed to simplify the process of updating Python package dependencies in your projects. It ensures that updates are applied safely by validating compatibility through automated testing.
+This tool automates the entire workflow of dependency updates, from detecting outdated packages to validating their compatibility through testing. By leveraging isolated virtual environments and automated test discovery, Python Package Updater ensures that updates are applied safely without breaking your project.
 
 ## Features
 
@@ -12,6 +13,7 @@ Python Package Updater is a tool designed to simplify the process of updating Py
 - **Isolated Testing**: Creates isolated virtual environments to test updates without affecting your system environment.
 - **Update Analysis**: Analyzes available package updates and determines compatibility.
 - **Safe Updates**: Ensures updates are applied only if all tests pass.
+- **Customizable Options**: Allows you to specify packages to update, perform dry runs, or skip tests based on your requirements.
 
 ## Architecture Diagram
 
@@ -52,17 +54,17 @@ You can use the tool either via `Makefile` commands or directly through the CLI.
   ```bash
   make format
   ```
-
+  
 - **Lint the code**:
   ```bash
   make lint
   ```
-
+  
 - **Run tests**:
   ```bash
   make test
   ```
-
+  
 ### Using CLI Options
 
 Run the tool directly on your Python project directory:
@@ -112,6 +114,9 @@ Contributions are welcome! To contribute:
 
 1. Fork the repository.
 2. Create a new branch for your feature or bugfix.
+   - Run the tests to ensure your changes do not break existing functionality.
+   - Lint your code to ensure it adheres to the project's coding standards.
+   - Format your code to maintain consistency.
 3. Commit your changes and push them to your fork.
 4. Submit a pull request with a detailed description of your changes.
 
