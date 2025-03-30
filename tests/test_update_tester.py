@@ -7,7 +7,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from package_updater.update_tester import PackageUpdateStatus, UpdateResult, UpdateTester
+from py_package_updater.update_tester import PackageUpdateStatus, UpdateResult, UpdateTester
 
 
 @pytest.fixture
@@ -58,8 +58,8 @@ def test_run_tests(update_tester):
     assert "test_simple" in output
 
 
-@patch("package_updater.package_manager.PackageManager.get_latest_version")
-@patch("package_updater.package_manager.PackageManager.get_version_range")
+@patch("py_package_updater.package_manager.PackageManager.get_latest_version")
+@patch("py_package_updater.package_manager.PackageManager.get_version_range")
 def test_find_compatible_update(mock_get_range, mock_get_latest, update_tester):
     """Test finding compatible updates for a package."""
     # Mock version information
@@ -130,7 +130,7 @@ def test_test_package_update_failure(update_tester):
 
 
 @patch(
-    "package_updater.package_manager.PackageManager.get_latest_version",
+    "py_package_updater.package_manager.PackageManager.get_latest_version",
     return_value=None,
 )
 def test_find_compatible_update_no_latest_version(mock_get_latest, update_tester):
@@ -140,7 +140,7 @@ def test_find_compatible_update_no_latest_version(mock_get_latest, update_tester
     assert result.compatible_version is None
 
 
-@patch("package_updater.package_manager.PackageManager.get_version_range", return_value=[])
+@patch("py_package_updater.package_manager.PackageManager.get_version_range", return_value=[])
 def test_find_compatible_update_no_versions(mock_get_range, update_tester):
     """Test finding compatible updates when no versions are available."""
     result = update_tester.find_compatible_update("requests")

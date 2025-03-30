@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from package_updater.file_updater import FileUpdater
+from py_package_updater.file_updater import FileUpdater
 
 
 @pytest.fixture

@@ -33,6 +33,9 @@ class TestDiscovery:
         logger.debug("Scanning %s for test files", self.project_path)
         self.test_files = []
         for root, _, files in os.walk(self.project_path):
+            # Skip common virtual environment directories, including Pipenv
+            if any(venv_dir in root for venv_dir in ("venv", ".venv", "env", ".env", "virtualenv", "build", "pipenv")):
+                continue
             for file in files:
                 if self.is_test_file(file):
                     full_path = os.path.join(root, file)

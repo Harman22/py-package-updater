@@ -25,7 +25,7 @@ Clone the repository and initialize the virtual environment:
 
 ```bash
 git clone https://github.com/Harman22/py-package-updater.git
-cd package_updater
+cd py_package_updater
 make init
 ```
 
@@ -70,7 +70,7 @@ You can use the tool either via `Makefile` commands or directly through the CLI.
 Run the tool directly on your Python project directory:
 
 ```bash
-python -m package_updater /path/to/your/project
+python -m py_package_updater /path/to/your/project
 ```
 
 #### Command-Line Options
@@ -85,19 +85,19 @@ python -m package_updater /path/to/your/project
 Update all packages in the current directory:
 
 ```bash
-python -m package_updater .
+python -m py_package_updater .
 ```
 
 Update specific packages:
 
 ```bash
-python -m package_updater . --packages requests pytest
+python -m py_package_updater . --packages requests pytest
 ```
 
 Perform a dry run to preview changes:
 
 ```bash
-python -m package_updater . --dry-run
+python -m py_package_updater . --dry-run
 ```
 
 ## Requirements

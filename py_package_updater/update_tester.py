@@ -97,7 +97,7 @@ class UpdateTester:
         ] + relative_test_files
 
         success, output = self.env_manager.run_python_command(pytest_command)
-        logger.debug("Test result: success=%s, output length=%s", success, len(output))
+        logger.debug("Test result: success=%s, output %s", success, output)
 
         return success, output
 

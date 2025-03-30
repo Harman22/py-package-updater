@@ -8,7 +8,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from package_updater.__main__ import (
+from py_package_updater.__main__ import (
     analyze_updates,
     apply_updates,
     filter_updates,
@@ -69,7 +69,7 @@ def test_filter_updates():
     assert filter_updates(all_updates, None) == all_updates
 
 
-@patch("package_updater.__main__.TestDiscovery")
+@patch("py_package_updater.__main__.TestDiscovery")
 def test_validate_tests_valid(mock_test_discovery, temp_project_dir):
     """Test validate_tests with valid test files."""
     mock_test_discovery.return_value.find_test_files.return_value = ["test_sample.py"]
@@ -77,14 +77,14 @@ def test_validate_tests_valid(mock_test_discovery, temp_project_dir):
     assert validate_tests(str(temp_project_dir)) is True
 
 
-@patch("package_updater.__main__.TestDiscovery")
+@patch("py_package_updater.__main__.TestDiscovery")
 def test_validate_tests_invalid(mock_test_discovery, temp_project_dir):
     """Test validate_tests with no valid test files."""
     mock_test_discovery.return_value.find_test_files.return_value = []
     assert validate_tests(str(temp_project_dir)) is False
 
 
-@patch("package_updater.__main__.UpdateTester")
+@patch("py_package_updater.__main__.UpdateTester")
 def test_analyze_updates_with_tests(mock_update_tester, temp_project_dir):
     """Test analyze_updates when tests are not skipped."""
     mock_update_tester.return_value.update_all_packages.return_value = {
@@ -96,7 +96,7 @@ def test_analyze_updates_with_tests(mock_update_tester, temp_project_dir):
     assert updates == {"requests": "2.26.0", "pytest": "6.2.5"}
 
 
-@patch("package_updater.__main__.PackageManager")
+@patch("py_package_updater.__main__.PackageManager")
 def test_analyze_updates_skip_tests(mock_package_manager):
     """Test analyze_updates when tests are skipped."""
     # Mock the PackageManager's behavior
@@ -125,7 +125,7 @@ def test_analyze_updates_skip_tests(mock_package_manager):
     }
 
 
-@patch("package_updater.__main__.FileUpdater")
+@patch("py_package_updater.__main__.FileUpdater")
 def test_apply_updates_dry_run(mock_file_updater, temp_project_dir):
     """Test apply_updates in dry-run mode."""
     updates = {"requests": "2.26.0", "pytest": "6.2.5"}
@@ -134,7 +134,7 @@ def test_apply_updates_dry_run(mock_file_updater, temp_project_dir):
     mock_file_updater.return_value.update_package_files.assert_not_called()
 
 
-@patch("package_updater.__main__.FileUpdater")
+@patch("py_package_updater.__main__.FileUpdater")
 def test_apply_updates_real_run(mock_file_updater, temp_project_dir):
     """Test apply_updates in real mode."""
     updates = {"requests": "2.26.0", "pytest": "6.2.5"}
@@ -153,7 +153,7 @@ def test_main_invalid_path():
 @patch("logging.basicConfig")
 def test_setup_logging_verbose(mock_basic_config):
     """Test setup_logging with verbose mode."""
-    from package_updater.__main__ import setup_logging
+    from py_package_updater.__main__ import setup_logging
 
     setup_logging(verbose=True)
     mock_basic_config.assert_called_once_with(
@@ -167,7 +167,7 @@ def test_setup_logging_verbose(mock_basic_config):
 @patch("logging.basicConfig")
 def test_setup_logging_non_verbose(mock_basic_config):
     """Test setup_logging without verbose mode."""
-    from package_updater.__main__ import setup_logging
+    from py_package_updater.__main__ import setup_logging
 
     setup_logging(verbose=False)
     mock_basic_config.assert_called_once_with(
@@ -180,7 +180,7 @@ def test_setup_logging_non_verbose(mock_basic_config):
 
 def test_create_parser():
     """Test create_parser for correct argument parsing."""
-    from package_updater.__main__ import create_parser
+    from py_package_updater.__main__ import create_parser
 
     parser = create_parser()
     args = parser.parse_args([".", "--packages", "requests", "--dry-run", "--verbose"])
@@ -190,9 +190,9 @@ def test_create_parser():
     assert args.verbose is True
 
 
-@patch("package_updater.__main__.validate_project_path")
-@patch("package_updater.__main__.analyze_updates")
-@patch("package_updater.__main__.apply_updates")
+@patch("py_package_updater.__main__.validate_project_path")
+@patch("py_package_updater.__main__.analyze_updates")
+@patch("py_package_updater.__main__.apply_updates")
 def test_main_successful_run(
     mock_apply_updates,
     mock_analyze_updates,
@@ -211,7 +211,7 @@ def test_main_successful_run(
     mock_apply_updates.assert_called_once()
 
 
-@patch("package_updater.__main__.validate_project_path")
+@patch("py_package_updater.__main__.validate_project_path")
 def test_main_keyboard_interrupt(mock_validate_project_path, temp_project_dir):
     """Test main function handling KeyboardInterrupt."""
     mock_validate_project_path.side_effect = KeyboardInterrupt
@@ -219,7 +219,7 @@ def test_main_keyboard_interrupt(mock_validate_project_path, temp_project_dir):
     assert result == 130
 
 
-@patch("package_updater.__main__.validate_project_path")
+@patch("py_package_updater.__main__.validate_project_path")
 def test_main_exception_handling(mock_validate_project_path, temp_project_dir):
     """Test main function handling generic exceptions."""
     mock_validate_project_path.side_effect = Exception("Test exception")

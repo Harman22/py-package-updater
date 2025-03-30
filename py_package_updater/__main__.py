@@ -35,16 +35,16 @@ def create_parser() -> argparse.ArgumentParser:
         epilog="""
 Examples:
   # Update all packages in the current directory
-  python -m package_updater .
+  python -m py_package_updater .
   
   # Update specific packages
-  python -m package_updater . --packages requests pytest
+  python -m py_package_updater . --packages requests pytest
   
   # Dry run without making changes
-  python -m package_updater . --dry-run
+  python -m py_package_updater . --dry-run
   
   # Show more detailed output
-  python -m package_updater . --verbose
+  python -m py_package_updater . --verbose
 """,
     )
 

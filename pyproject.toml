@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "package_updater"
+name = "py_package_updater"
 version = "0.1.0"
 description = "A smart Python package updater that safely upgrades dependencies while verifying tests pass."
 readme = "README.md"
@@ -28,7 +28,7 @@ dependencies = [
 ]
 
 [project.scripts]
-package_updater = "package_updater.__main__:main"
+package_updater = "py_package_updater.__main__:main"
 
 [tool.setuptools]
-packages = ["package_updater"]
+packages = ["py_package_updater"]

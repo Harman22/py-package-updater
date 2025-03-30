@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 import pytest
 
-from package_updater.environment_manager import EnvironmentManager
+from py_package_updater.environment_manager import EnvironmentManager
 
 
 @pytest.fixture

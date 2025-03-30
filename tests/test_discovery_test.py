@@ -7,7 +7,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from package_updater.test_discovery import TestDiscovery
+from py_package_updater.test_discovery import TestDiscovery
 
 
 @pytest.fixture

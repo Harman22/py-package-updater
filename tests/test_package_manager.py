@@ -2,7 +2,7 @@ import os
 import unittest
 from unittest.mock import MagicMock, mock_open, patch
 
-from package_updater.package_manager import PackageManager
+from py_package_updater.package_manager import PackageManager
 
 project_path = "/fake/project/path"
 package_manager = PackageManager(project_path)
@@ -64,10 +64,10 @@ def test_get_version_range(mock_get):
     assert result == ["1.0.0", "2.0.0", "3.0.0"]
 
 
-@patch("package_updater.package_manager.PackageManager.get_latest_version")
-@patch("package_updater.package_manager.PackageManager.get_version_range")
-@patch("package_updater.package_manager.PackageManager.parse_requirements_txt")
-@patch("package_updater.package_manager.PackageManager.detect_package_file")
+@patch("py_package_updater.package_manager.PackageManager.get_latest_version")
+@patch("py_package_updater.package_manager.PackageManager.get_version_range")
+@patch("py_package_updater.package_manager.PackageManager.parse_requirements_txt")
+@patch("py_package_updater.package_manager.PackageManager.detect_package_file")
 def test_analyze_packages(mock_detect, mock_parse, mock_range, mock_latest):
     mock_detect.return_value = os.path.join(project_path, "requirements.txt")
     mock_parse.return_value = {"package1": "1.0.0"}

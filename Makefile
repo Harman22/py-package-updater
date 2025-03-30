@@ -27,7 +27,7 @@ format:
 
 # Lint code using pylint
 lint:
-	$(PYTHON) -m pylint package_updater
+	$(PYTHON) -m pylint py_package_updater
 
 # Run tests using pytest
 test:
