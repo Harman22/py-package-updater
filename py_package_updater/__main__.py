@@ -45,6 +45,9 @@ Examples:
   
   # Show more detailed output
   python -m py_package_updater . --verbose
+  
+  # Specify a custom test folder
+  python -m py_package_updater . --test-folder tests
 """,
     )
 
@@ -64,6 +67,11 @@ Examples:
 
     parser.add_argument(
         "--skip-tests", action="store_true", help="Skip running tests (not recommended)"
+    )
+
+    parser.add_argument(
+        "--test-folder",
+        help="Path to the folder containing test files (default: project root)",
     )
 
     return parser
@@ -92,12 +100,11 @@ def validate_project_path(path: str) -> Optional[Path]:
     return project_path
 
 
-def validate_tests(project_path: str) -> bool:
+def validate_tests(project_path: str, test_folder: Optional[str]) -> bool:
     """Validate that the project has runnable tests."""
     logger.info("Validating tests in the project")
-    test_discovery = TestDiscovery(project_path)
+    test_discovery = TestDiscovery(project_path, test_folder)
     test_files = test_discovery.find_test_files()
-
     if not test_files:
         logger.warning("No test files found in the project")
         return False
@@ -128,7 +135,7 @@ def filter_updates(
 def analyze_updates(project_path: Path, args) -> Dict[str, str]:
     """Analyze package updates."""
     if not args.skip_tests:
-        update_tester = UpdateTester(str(project_path))
+        update_tester = UpdateTester(str(project_path), args.test_folder)
         results = update_tester.update_all_packages()
     else:
         logger.warning("Skipping tests as requested")
@@ -191,7 +198,9 @@ def main(args: Optional[list[str]] = None) -> int:
         project_path = validate_project_path(args.project_path)
 
         # Validate tests if not skipping
-        if not args.skip_tests and not validate_tests(str(project_path)):
+        if not args.skip_tests and not validate_tests(
+            str(project_path), args.test_folder
+        ):
             logger.warning("Proceeding with report generation despite no valid tests")
 
         # Analyze updates

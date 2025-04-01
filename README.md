@@ -79,6 +79,7 @@ python -m py_package_updater /path/to/your/project
 - `--dry-run`: Run without making any changes.
 - `--verbose`: Show detailed output.
 - `--skip-tests`: Skip running tests (not recommended).
+- `--test-folder`: Path to the folder containing test files (default: project root).
 
 #### Examples
 
@@ -98,6 +99,12 @@ Perform a dry run to preview changes:
 
 ```bash
 python -m py_package_updater . --dry-run
+```
+
+Run tests from a specific folder:
+
+```bash
+python -m py_package_updater . --test-folder tests
 ```
 
 ## Requirements

@@ -1,4 +1,4 @@
 requests==2.32.3
 packaging==24.2
-virtualenv==20.29.3
+virtualenv==20.30.0
 pytest==8.3.5

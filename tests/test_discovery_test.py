@@ -36,9 +36,50 @@ def test_another():
     return tmp_path
 
 
+@pytest.fixture
+def temp_project_dir_with_tests(tmp_path):
+    """Create a temporary project directory with test files in a subfolder."""
+    test_folder = tmp_path / "custom_tests"
+    test_folder.mkdir()
+
+    # Create a valid test file
+    test_file1 = test_folder / "test_valid.py"
+    test_file1.write_text(
+        """
+def test_something():
+    assert True
+
+def test_another():
+    assert 1 + 1 == 2
+"""
+    )
+
+    # Create a non-test Python file
+    regular_file = test_folder / "regular.py"
+    regular_file.write_text("print('not a test')")
+
+    # Create an invalid test file
+    test_file2 = test_folder / "test_invalid.py"
+    test_file2.write_text("this is not valid python")
+
+    return tmp_path, "custom_tests"
+
+
 def test_find_test_files(temp_project_dir):
     """Test that test files are correctly identified."""
     discoverer = TestDiscovery(str(temp_project_dir))
+    test_files = discoverer.find_test_files()
+
+    assert len(test_files) == 2
+    assert any("test_valid.py" in f for f in test_files)
+    assert any("test_invalid.py" in f for f in test_files)
+    assert not any("regular.py" in f for f in test_files)
+
+
+def test_find_test_files_with_test_folder(temp_project_dir_with_tests):
+    """Test that test files are correctly identified in a specific test folder."""
+    temp_project_dir, test_folder = temp_project_dir_with_tests
+    discoverer = TestDiscovery(str(temp_project_dir), test_folder)
     test_files = discoverer.find_test_files()
 
     assert len(test_files) == 2
@@ -53,6 +94,18 @@ def test_validate_test_file(temp_project_dir):
 
     valid_file = os.path.join(str(temp_project_dir), "test_valid.py")
     invalid_file = os.path.join(str(temp_project_dir), "test_invalid.py")
+
+    assert discoverer.validate_test_file(valid_file)
+    assert not discoverer.validate_test_file(invalid_file)
+
+
+def test_validate_test_file_with_test_folder(temp_project_dir_with_tests):
+    """Test that test file validation works correctly in a specific test folder."""
+    temp_project_dir, test_folder = temp_project_dir_with_tests
+    discoverer = TestDiscovery(str(temp_project_dir), test_folder)
+
+    valid_file = os.path.join(str(temp_project_dir), test_folder, "test_valid.py")
+    invalid_file = os.path.join(str(temp_project_dir), test_folder, "test_invalid.py")
 
     assert discoverer.validate_test_file(valid_file)
     assert not discoverer.validate_test_file(invalid_file)
@@ -81,6 +134,22 @@ def test_discover_and_validate_tests(temp_project_dir):
     assert results[valid_file]
 
     invalid_file = os.path.join(str(temp_project_dir), "test_invalid.py")
+    assert not results[invalid_file]
+
+
+def test_discover_and_validate_tests_with_test_folder(temp_project_dir_with_tests):
+    """Test the complete test discovery and validation process in a specific test folder."""
+    temp_project_dir, test_folder = temp_project_dir_with_tests
+    discoverer = TestDiscovery(str(temp_project_dir), test_folder)
+    discoverer.find_test_files()
+    results = discoverer.validate_test_files()
+
+    assert len(results) == 2
+
+    valid_file = os.path.join(str(temp_project_dir), test_folder, "test_valid.py")
+    assert results[valid_file]
+
+    invalid_file = os.path.join(str(temp_project_dir), test_folder, "test_invalid.py")
     assert not results[invalid_file]
 
 

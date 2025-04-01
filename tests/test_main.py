@@ -74,14 +74,22 @@ def test_validate_tests_valid(mock_test_discovery, temp_project_dir):
     """Test validate_tests with valid test files."""
     mock_test_discovery.return_value.find_test_files.return_value = ["test_sample.py"]
     mock_test_discovery.return_value.validate_test_files.return_value = {"test_sample.py": True}
-    assert validate_tests(str(temp_project_dir)) is True
+    assert validate_tests(str(temp_project_dir), None) is True
 
 
 @patch("py_package_updater.__main__.TestDiscovery")
 def test_validate_tests_invalid(mock_test_discovery, temp_project_dir):
     """Test validate_tests with no valid test files."""
     mock_test_discovery.return_value.find_test_files.return_value = []
-    assert validate_tests(str(temp_project_dir)) is False
+    assert validate_tests(str(temp_project_dir), None) is False
+
+
+@patch("py_package_updater.__main__.TestDiscovery")
+def test_validate_tests_with_test_folder(mock_test_discovery, temp_project_dir):
+    """Test validate_tests with a specific test folder."""
+    mock_test_discovery.return_value.find_test_files.return_value = ["test_sample.py"]
+    mock_test_discovery.return_value.validate_test_files.return_value = {"test_sample.py": True}
+    assert validate_tests(str(temp_project_dir), "tests") is True
 
 
 @patch("py_package_updater.__main__.UpdateTester")
@@ -91,7 +99,7 @@ def test_analyze_updates_with_tests(mock_update_tester, temp_project_dir):
         "requests": Mock(compatible_version="2.26.0", current_version="2.25.1"),
         "pytest": Mock(compatible_version="6.2.5", current_version="6.2.4"),
     }
-    args = Mock(skip_tests=False, packages=None)
+    args = Mock(skip_tests=False, packages=None, test_folder="tests")
     updates = analyze_updates(temp_project_dir, args)
     assert updates == {"requests": "2.26.0", "pytest": "6.2.5"}
 
@@ -190,6 +198,16 @@ def test_create_parser():
     assert args.verbose is True
 
 
+def test_create_parser_with_test_folder():
+    """Test create_parser for correct argument parsing with --test-folder."""
+    from py_package_updater.__main__ import create_parser
+
+    parser = create_parser()
+    args = parser.parse_args([".", "--test-folder", "custom_tests"])
+    assert args.project_path == "."
+    assert args.test_folder == "custom_tests"
+
+
 @patch("py_package_updater.__main__.validate_project_path")
 @patch("py_package_updater.__main__.analyze_updates")
 @patch("py_package_updater.__main__.apply_updates")
@@ -225,3 +243,13 @@ def test_main_exception_handling(mock_validate_project_path, temp_project_dir):
     mock_validate_project_path.side_effect = Exception("Test exception")
     result = main([str(temp_project_dir)])
     assert result == 1
+
+
+@patch("py_package_updater.__main__.validate_tests")
+def test_main_with_test_folder(mock_validate_tests, temp_project_dir):
+    """Test main function with the --test-folder argument."""
+    mock_validate_tests.return_value = True
+
+    result = main([str(temp_project_dir), "--test-folder", "custom_tests"])
+    assert result == 0
+    mock_validate_tests.assert_called_once_with(str(temp_project_dir), "custom_tests")

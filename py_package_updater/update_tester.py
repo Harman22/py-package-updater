@@ -38,10 +38,10 @@ class PackageUpdateStatus:
 class UpdateTester:
     """Class for coordinating and testing package updates."""
 
-    def __init__(self, project_path: str):
+    def __init__(self, project_path: str, test_folder: Optional[str] = None):
         self.project_path = Path(project_path)
         self.package_manager = PackageManager(project_path)
-        self.test_discovery = TestDiscovery(project_path)
+        self.test_discovery = TestDiscovery(project_path, test_folder)
         self.env_manager = EnvironmentManager(project_path)
 
         # Verify packages were initialized

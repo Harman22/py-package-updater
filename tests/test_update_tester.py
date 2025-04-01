@@ -140,7 +140,10 @@ def test_find_compatible_update_no_latest_version(mock_get_latest, update_tester
     assert result.compatible_version is None
 
 
-@patch("py_package_updater.package_manager.PackageManager.get_version_range", return_value=[])
+@patch(
+    "py_package_updater.package_manager.PackageManager.get_version_range",
+    return_value=[],
+)
 def test_find_compatible_update_no_versions(mock_get_range, update_tester):
     """Test finding compatible updates when no versions are available."""
     result = update_tester.find_compatible_update("requests")

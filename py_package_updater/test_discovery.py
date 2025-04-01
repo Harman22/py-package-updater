@@ -15,8 +15,9 @@ logger = logging.getLogger(__name__)
 class TestDiscovery:
     """Class for discovering and validating Python test files in a project."""
 
-    def __init__(self, project_path: str) -> None:
+    def __init__(self, project_path: str, test_folder: str = None) -> None:
         self.project_path = project_path
+        self.test_folder = test_folder
         self.test_files: List[str] = []
         self.test_functions: Dict[str, Set[str]] = {}
 
@@ -29,12 +30,30 @@ class TestDiscovery:
         )
 
     def find_test_files(self) -> List[str]:
-        """Recursively scan the project directory for test files."""
-        logger.debug("Scanning %s for test files", self.project_path)
+        """Recursively scan the project or test folder for test files."""
+        logger.debug(
+            "Scanning %s for test files", self.test_folder or self.project_path
+        )
         self.test_files = []
-        for root, _, files in os.walk(self.project_path):
+        search_path = (
+            os.path.join(self.project_path, self.test_folder)
+            if self.test_folder
+            else self.project_path
+        )
+        for root, _, files in os.walk(search_path):
             # Skip common virtual environment directories, including Pipenv
-            if any(venv_dir in root for venv_dir in ("venv", ".venv", "env", ".env", "virtualenv", "build", "pipenv")):
+            if any(
+                venv_dir in root
+                for venv_dir in (
+                    "venv",
+                    ".venv",
+                    "env",
+                    ".env",
+                    "virtualenv",
+                    "build",
+                    "pipenv",
+                )
+            ):
                 continue
             for file in files:
                 if self.is_test_file(file):
